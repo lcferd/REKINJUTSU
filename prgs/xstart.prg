@@ -1,6 +1,8 @@
 *- Seta os settings padrão. 
 lSetSettings()
 
+set step on 
+
 *- Verifica se é iniciado com o Fox. 
 if _vfp.StartMode <> 4 
 	*- Máquina pessoal.
@@ -39,26 +41,26 @@ endwith
 
 
 
-public cDirectory, oGlobalSet
+public oGlobalSet
 
 *- Variável com funções globais.
 oGlobalSet = newobject([xGlobalSettings], [xGlobalSettings.vcx])
 
 *- pega o user logado.
-cDirectory = getenv("userprofile")
-cDirectory = cDirectory + [\Documents\Rekinjutsu\config\]
+with oGlobalSet
+	.HomePath = getenv("userprofile")
+	.HomePath = .HomePath + [\Documents\Rekinjutsu\]
 
-*- Verifica se existe o caminho de configuração. 
-if !DIrectory(cDirectory)
-	Md &cDirectory
-EndIf 
+	*- Verifica se existe o caminho de configuração. 
+	.ConfigPath = .HomePath + [config\]
+	if !DIrectory(.ConfigPath)
+		Md &.ConfigPath 
+	EndIf 
 
-public cHomePath
+	*- Verifica se o arquivo de configuração com o banco de dados está criado.
+	cFile = .ConfigPath  + [config.luc]	
+endwith 
 
-cHomePath = cDirectory
-
-*- Verifica se o arquivo de configuração com o banco de dados está criado.
-cFile = cDirectory + [config.luc]
 if !file(cFile)
 	do form f_First_Input
 	read events
