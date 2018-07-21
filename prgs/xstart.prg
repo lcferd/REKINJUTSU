@@ -3,26 +3,32 @@ lSetSettings()
 
 *- Verifica se é iniciado com o Fox. 
 if _vfp.StartMode <> 4 
-	*- Máquina pessoal.
-	if sys(0) = [LUCAS-PC # LUCASRODRIGUES] 
-		set path to 	[C:\Users\LUCASRODRIGUES\Documents\GITHUB\REKINJUTSU\prgs\] additive 
-		set path to 	[C:\Users\LUCASRODRIGUES\Documents\GITHUB\REKINJUTSU\forms\] additive 
-		set path to 	[C:\Users\LUCASRODRIGUES\Documents\GITHUB\REKINJUTSU\classes\] additive 
-		on key label f12 suspend 
-	else
-		*- Máquina trabalho.
-		if sys(0) = [SSA-503 # lrodrigues]
-			set path to [C:\Users\lrodrigues\Desktop\Projeto Shinigami]
+	do case
+		*- Máquina pessoal
+		case sys(0) = [LUCAS-PC # LUCASRODRIGUES]
+			set path to 	[C:\Users\LUCASRODRIGUES\Documents\GITHUB\REKINJUTSU\prgs\] additive 
+			set path to 	[C:\Users\LUCASRODRIGUES\Documents\GITHUB\REKINJUTSU\forms\] additive 
+			set path to 	[C:\Users\LUCASRODRIGUES\Documents\GITHUB\REKINJUTSU\classes\] additive 
 			on key label f12 suspend 
-		else
+		*- Máquina trabalho.
+		case sys(0) = [SSA-503 # lrodrigues]
+			set path to 	[C:\Users\lrodrigues\Desktop\GITHUB\REKINJUTSU\prgs\] additive 
+			set path to 	[C:\Users\lrodrigues\Desktop\GITHUB\REKINJUTSU\forms\] additive 
+			set path to 	[[C:\Users\lrodrigues\Desktop\GITHUB\REKINJUTSU\classes\] additive 
+			on key label f12 suspend 
+		*- Máquina pessoal
+		case sys(0) = [RENAN-PC # zDark]
+			set path to 	[C:\Users\zDark\Desktop\Github\REKINJUTSU\prgs\]	additive
+			set path to 	[C:\Users\zDark\Desktop\Github\REKINJUTSU\forms\]	additive
+			set path to 	[C:\Users\zDark\Desktop\Github\REKINJUTSU\classes\]	additive
+			on key label f12 suspend
+			on key label f11 set sysmenu to default
+		otherwise
 			*- Safado tentando explorar meu fonte. 
 			messagebox("ta tentando entrar com o fox danadinho")
 			lCloseApp()
-		endif 
-	endif 
+		endcase
 endif 
-
-
 **************************************
 on shutdown Do lCloseApp in xStart.PRG
 **************************************
