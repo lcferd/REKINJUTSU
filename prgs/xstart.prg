@@ -5,7 +5,9 @@ lSetSettings()
 if _vfp.StartMode <> 4 
 	*- Máquina pessoal.
 	if sys(0) = [LUCAS-PC # LUCASRODRIGUES] 
-		set path to [C:\Users\LUCASRODRIGUES\Documents\Projeto Shinigami]
+		set path to 	[C:\Users\LUCASRODRIGUES\Documents\GITHUB\REKINJUTSU\prgs\] additive 
+		set path to 	[C:\Users\LUCASRODRIGUES\Documents\GITHUB\REKINJUTSU\forms\] additive 
+		set path to 	[C:\Users\LUCASRODRIGUES\Documents\GITHUB\REKINJUTSU\classes\] additive 
 		on key label f12 suspend 
 	else
 		*- Máquina trabalho.
