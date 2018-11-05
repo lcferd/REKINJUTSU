@@ -3,23 +3,32 @@ lSetSettings()
 
 *- Verifica se é iniciado com o Fox. 
 if _vfp.StartMode <> 4 
-	*- Máquina pessoal.
-	if sys(0) = [LUCAS-PC # LUCASRODRIGUES] 
-		set path to [C:\Users\LUCASRODRIGUES\Documents\Projeto Shinigami]
-		on key label f12 suspend 
-	else
-		*- Máquina trabalho.
-		if sys(0) = [SSA-503 # lrodrigues]
-			set path to [C:\Users\lrodrigues\Desktop\Projeto Shinigami]
+	do case
+		*- Máquina pessoal
+		case sys(0) = [LUCAS-PC # LUCASRODRIGUES]
+			set path to 	[C:\Users\LUCASRODRIGUES\Documents\GITHUB\REKINJUTSU\prgs\] additive 
+			set path to 	[C:\Users\LUCASRODRIGUES\Documents\GITHUB\REKINJUTSU\forms\] additive 
+			set path to 	[C:\Users\LUCASRODRIGUES\Documents\GITHUB\REKINJUTSU\classes\] additive 
 			on key label f12 suspend 
-		else
+		*- Máquina trabalho.
+		case sys(0) = [SSA-503 # lrodrigues]
+			set path to 	[C:\Users\lrodrigues\Desktop\GITHUB\REKINJUTSU\prgs\] additive 
+			set path to 	[C:\Users\lrodrigues\Desktop\GITHUB\REKINJUTSU\forms\] additive 
+			set path to 	[[C:\Users\lrodrigues\Desktop\GITHUB\REKINJUTSU\classes\] additive 
+			on key label f12 suspend 
+		*- Máquina pessoal
+		case sys(0) = [RENAN-PC # zDark]
+			set path to 	[C:\Users\zDark\Desktop\REKINJUTSU\prgs\]	additive
+			set path to 	[C:\Users\zDark\Desktop\REKINJUTSU\forms\]	additive
+			set path to 	[C:\Users\zDark\Desktop\REKINJUTSU\classes\]	additive
+			on key label f12 suspend
+			on key label f11 set sysmenu to default
+		otherwise
 			*- Safado tentando explorar meu fonte. 
 			messagebox("ta tentando entrar com o fox danadinho")
 			lCloseApp()
-		endif 
-	endif 
+		endcase
 endif 
-
 
 **************************************
 on shutdown Do lCloseApp in xStart.PRG
@@ -37,26 +46,26 @@ endwith
 
 
 
-public cDirectory, oGlobalSet
+public oGlobalSet
 
 *- Variável com funções globais.
 oGlobalSet = newobject([xGlobalSettings], [xGlobalSettings.vcx])
 
 *- pega o user logado.
-cDirectory = getenv("userprofile")
-cDirectory = cDirectory + [\Documents\Rekinjutsu\config\]
+with oGlobalSet
+	.HomePath = getenv("userprofile")
+	.HomePath = .HomePath + [\Documents\Rekinjutsu\]
 
-*- Verifica se existe o caminho de configuração. 
-if !DIrectory(cDirectory)
-	Md &cDirectory
-EndIf 
+	*- Verifica se existe o caminho de configuração. 
+	.ConfigPath = .HomePath + [config\]
+	if !DIrectory(.ConfigPath)
+		Md &.ConfigPath 
+	EndIf 
 
-public cHomePath
+	*- Verifica se o arquivo de configuração com o banco de dados está criado.
+	cFile = .ConfigPath  + [config.luc]	
+endwith 
 
-cHomePath = cDirectory
-
-*- Verifica se o arquivo de configuração com o banco de dados está criado.
-cFile = cDirectory + [config.luc]
 if !file(cFile)
 	do form f_First_Input
 	read events
@@ -77,7 +86,7 @@ endif
 *- Novamente valida as informações do arquivo.
 if oGlobalSet.lValidaConfig(cFile)
 	*- Form Principal.
-	do form tela_atividades
+	do form f_tela_atividades
 	read events
 endif 
 
